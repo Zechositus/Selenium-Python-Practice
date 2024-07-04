@@ -11,10 +11,10 @@ def init_driver(request):
 
     supported_browsers = ['chrome', 'ch', 'headlesschrome', 'firefox','Firefox', 'ff', 'headlessfirefox']
 
-    browser = os.environ.get('BROWSER', None)
+    browser = os.environ.get('BROWSER', 'firefox')
     if not browser:
-        browser = 'firefox'
-        #raise Exception("The environment variable 'BROWSER' must be set.")
+
+        raise Exception("The environment variable 'BROWSER' must be set.")
 
     browser = browser.lower()
     if browser not in supported_browsers:
@@ -42,6 +42,9 @@ def init_driver(request):
     yield
     driver.quit()
 
+@pytest.fixture(scope="session",autouse=True)
+def setup_results_dir():
+    os.environ['RESULTS_DIR'] = './results'
 
 # @pytest.hookimpl(hookwrapper=True)
 # def pytest_runtest_makereport(item, call):
